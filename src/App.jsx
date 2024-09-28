@@ -23,7 +23,7 @@ function App() {
 
   const handlerCheckbox = (e) => {
     const id = e.target.id;
-    const index = taskList.findIndex(t=>{
+    const index = taskList.findIndex(t => {
       return (t.id === id);
     })
     let newTaskList = [...taskList];
@@ -37,13 +37,13 @@ function App() {
 
   }
   const handlerDelete = (id) => {
-    console.log("Delete");
-    const index = taskList.findIndex(t=>{
-      return(t.id = id);
-    })
-    let newTaskList = [...taskList];
-    newTaskList.pop(newTaskList[index]);
-
+    const isDelete = confirm("Are you sure you want to delete this");
+    if (isDelete) {
+      const newTaskList = taskList.filter(t => {
+        return (t.id != id);
+      })
+      setTaskList(newTaskList);
+    }
   }
 
   return (
@@ -75,7 +75,7 @@ function App() {
                 </div>
                 <div className="buttons flex gap-2">
                   <button onClick={handlerEdit} className='bg-green-600 py-1 px-3 rounded-lg active:bg-green-700 text-white font-bold'>Edit</button>
-                  <button onClick={()=>{handlerDelete(t.id)}} className='bg-green-600 py-1 px-3 rounded-lg active:bg-green-700 text-white font-bold'>Delete</button>
+                  <button onClick={() => { handlerDelete(t.id) }} className='bg-green-600 py-1 px-3 rounded-lg active:bg-green-700 text-white font-bold'>Delete</button>
                 </div>
               </div>
             )

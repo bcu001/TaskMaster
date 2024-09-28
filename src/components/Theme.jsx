@@ -1,6 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import bg from '../assets/img/bg.svg';
-import dark_bg from '../assets/img/dark-bg.svg';
 
 export default function Theme() {
     const [isDarkTheme, setIsDarkTheme] = useState(() => {
@@ -13,7 +11,7 @@ export default function Theme() {
         document.documentElement.setAttribute("data-theme", theme);
         // const bg_img = isDarkTheme ? './src/assets/img/dark-bg.svg' : './src/assets/img/bg.svg';
         // const bg_img = isDarkTheme ? '/src/assets/img/dark-bg.svg' : '/src/assets/img/bg.svg';
-        const bg_img = isDarkTheme ? dark_bg: bg;
+        const bg_img = isDarkTheme ? '/dark-bg.svg': 'bg.svg';
         document.body.style.backgroundImage = `url(${bg_img})`;
     }, [isDarkTheme]);
 

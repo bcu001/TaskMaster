@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    /* --bg-cl: #555dff1f; */
+    --bg-cl: #ffffff79;
+    --txt-cl: #000;
+    --shadow: rgba(0, 0, 0, 0.1);
+
+    /* --bg-cl: #00000079;
+    --txt-cl: #fff;
+    --shadow: rgba(255, 255, 255, 0.1); */
+}
+
+[data-theme='dark']{
+    --bg-cl: #00000079;
+    --txt-cl: #fff;
+    --shadow: rgba(255, 255, 255, 0.1);
+}
+
+html,
+body {
+    width: 100%;
+}
+
+body {
+    background-image: url('assets/img/bg.svg');
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+
+.navbar {
+    background-color: var(--bg-cl);
+    color: var(--txt-cl);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 0 4px 30px var(--shadow);
+}
+
+#main-taskmaster {
+    background-color: var(--bg-cl); 
+    color: var(--txt-cl);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 0 4px 30px var(--shadow);
+}
+
+input{
+    background-color: var(--bg-cl); 
+    color: var(--txt-cl);
+}

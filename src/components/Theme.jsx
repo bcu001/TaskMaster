@@ -10,7 +10,7 @@ export default function Theme() {
         const theme = isDarkTheme ? 'dark' : 'light';
         document.documentElement.setAttribute("data-theme", theme);
         // const bg_img = isDarkTheme ? './src/assets/img/dark-bg.svg' : './src/assets/img/bg.svg';
-        const bg_img = isDarkTheme ? require('./src/assets/img/dark-bg.svg') : require('./src/assets/img/bg.svg');
+        const bg_img = isDarkTheme ? '/src/assets/img/dark-bg.svg' : '/src/assets/img/bg.svg';
         document.body.style.backgroundImage = `url(${bg_img})`;
     }, [isDarkTheme]);
 

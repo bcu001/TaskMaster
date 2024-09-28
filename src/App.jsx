@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Navbar from './components/Navbar'
 import { v4 as uuidv4 } from 'uuid';
 
@@ -6,9 +6,28 @@ function App() {
   const [task, setTask] = useState("");
   const [taskList, setTaskList] = useState([]);
   const [isEdit, setIsEdit] = useState({ editing: false });
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const showData = () => {
     console.log(taskList);
+  }
+
+  useEffect(() => {
+    let saveTaskList = localStorage.getItem('taskList');
+    if (saveTaskList) {
+      let jsonSaveTaskList = JSON.parse(saveTaskList);
+      setTaskList(jsonSaveTaskList);
+    }
+    setIsLoaded(true);
+  }, [])
+
+  useEffect(() => {
+    if (isLoaded) { saveTaskList(); }
+  }, [taskList, isLoaded])
+
+  const saveTaskList = () => {
+    localStorage.setItem('taskList', JSON.stringify(taskList));
+    console.log('data saved');
   }
 
   const handlerAdd = () => {
@@ -94,11 +113,11 @@ function App() {
           <h2 className='font-bold text-xl'>Your Tasks</h2>
 
           {taskList.length === 0 && <div className='m-5 text-red-600 text-xl text-center' >No tasks</div>}
-          
+
           {taskList.map((t) => {
             return (
               <div key={t.id} className='flex justify-between mb-5 '>
-                <div className='flex gap-2 w-10/12'>
+                <div className='flex gap-2 w-10/12 items-center'>
                   <input type="checkbox" id={t.id} onChange={handlerCheckbox} />
                   <div className={`${t.isDone ? 'line-through' : ''}`}>{t.task}</div>
                 </div>

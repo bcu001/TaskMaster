@@ -9,7 +9,7 @@ export default function Theme() {
     useEffect(() => {
         const theme = isDarkTheme ? 'dark' : 'light';
         document.documentElement.setAttribute("data-theme", theme);
-        const bg_img = isDarkTheme ? '/src/assets/img/dark-bg.svg' : '/src/assets/img/bg.svg';
+        const bg_img = isDarkTheme ? '../assets/img/dark-bg.svg' : '../assets/img/bg.svg';
         document.body.style.backgroundImage = `url(${bg_img})`;
     }, [isDarkTheme]);
 

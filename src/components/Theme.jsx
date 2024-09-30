@@ -9,8 +9,6 @@ export default function Theme() {
     useEffect(() => {
         const theme = isDarkTheme ? 'dark' : 'light';
         document.documentElement.setAttribute("data-theme", theme);
-        // const bg_img = isDarkTheme ? './src/assets/img/dark-bg.svg' : './src/assets/img/bg.svg';
-        // const bg_img = isDarkTheme ? '/src/assets/img/dark-bg.svg' : '/src/assets/img/bg.svg';
         const bg_img = isDarkTheme ? '/dark-bg.svg': 'bg.svg';
         document.body.style.backgroundImage = `url(${bg_img})`;
     }, [isDarkTheme]);
@@ -28,7 +26,7 @@ export default function Theme() {
     return (
         <>
             <div onClick={toggleTheme}>
-                {isDarkTheme ? <span>Dark</span> : <span>Light</span>}
+                {isDarkTheme ? <span>Light</span> : <span>Dark</span>}
             </div>
         </>
     );

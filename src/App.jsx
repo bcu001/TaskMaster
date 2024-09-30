@@ -92,17 +92,29 @@ function App() {
     }
   }
 
+  const handlerResetInput = () => {
+    let a = document.getElementById('e');
+    textarea.style.height = 'auto';
+    textarea.value = '';
+  }
+
+  const handlerInput = () => {
+    let a = document.getElementById('e'); a.style.height = 'auto';
+    a.style.height = a.scrollHeight + 'px';
+  }
+
   return (
     <>
       <Navbar showData={showData} />
       <div id='main-taskmaster' className="todo-main container mx-auto my-6 rounded-xl p-5 min-h-[85vh]">
-        <h1 className='font-bold text-xl text-center'>TaskMaster - Manage you todos at one place</h1>
+        <h1 className='font-bold text-xl text-center'>TaskMaster - Your's Tasks</h1>
         <div className="addTask">
           <h2 className='my-2 font-bold text-xl'>Add your Task</h2>
           <div className='flex gap-4'>
             <input className='outline-none rounded-lg p-1 w-11/12' name='task' type="text" onChange={handerChange} onKeyDown={handlerKeyDown} value={task} placeholder='Enter your task' />
-            <button onClick={() => { handlerSave() }} className={`bg-green-600 py-1 px-3 rounded-lg active:bg-green-700 text-white font-bold ${isEdit.editing ? '' : 'hidden'}`}>Save</button>
-            <button onClick={handlerAdd} className={`bg-green-600 py-1 px-3 rounded-lg active:bg-green-700 text-white font-bold  ${isEdit.editing ? 'hidden' : ''}`}>Add</button>
+            {/* <textarea id='e' className='outline-none w-11/12 p-1 text-base leading-relaxed border border-gray-300 rounded-md resize-none overflow-hidden box-border max-h-52' onInput={handlerInput} name='task' type="text" onChange={handerChange} onKeyDown={handlerKeyDown} value={task} rows="1" placeholder="Type your task..." ></textarea> */}
+            <button onClick={() => { handlerSave() }} className={`bg-green-600 h-full py-1 px-3 rounded-lg active:bg-green-700 text-white font-bold ${isEdit.editing ? '' : 'hidden'}`}>Save</button>
+            <button onClick={handlerAdd} className={`bg-green-600 h-full py-1 px-3 rounded-lg active:bg-green-700 text-white font-bold  ${isEdit.editing ? 'hidden' : ''}`}>Add</button>
           </div>
         </div>
 
@@ -122,8 +134,8 @@ function App() {
                   <div className={`${t.isDone ? 'line-through' : ''}`}>{t.task}</div>
                 </div>
                 <div className="buttons flex gap-2 h-full">
-                  <button onClick={(e) => { handlerEdit(e, t.id) }} className='bg-green-600 py-1 px-3 rounded-lg active:bg-green-700 text-white font-bold'>Edit</button>
-                  <button onClick={() => { handlerDelete(t.id) }} className='bg-green-600 py-1 px-3 rounded-lg active:bg-green-700 text-white font-bold'>Delete</button>
+                  <button onClick={(e) => { handlerEdit(e, t.id) }} className='bg-green-600 py-1 px-3 rounded-lg active:bg-green-700 text-white font-bold'><img src="/edit.svg" alt="edit" width={25} /></button>
+                  <button onClick={() => { handlerDelete(t.id) }} className='bg-red-600 py-1 px-3 rounded-lg active:bg-red-700 text-white font-bold'><img src="/trash.svg" alt="delete" width={25} /></button>
                 </div>
               </div>
             )

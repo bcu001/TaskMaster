@@ -42,7 +42,7 @@ body {
     box-shadow: 0 4px 30px var(--shadow);
 }
 
-input {
+input, textarea {
     background-color: var(--bg-cl);
     color: var(--txt-cl);
 }

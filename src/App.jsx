@@ -7,6 +7,7 @@ function App() {
   const [taskList, setTaskList] = useState([]);
   const [isEdit, setIsEdit] = useState({ editing: false });
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showFinishedTask, setShowFinishTask] = useState(false);
 
   const showData = () => {
     console.log(taskList);
@@ -27,7 +28,10 @@ function App() {
 
   const saveTaskList = () => {
     localStorage.setItem('taskList', JSON.stringify(taskList));
-    console.log('data saved');
+  }
+
+  const toogleFinishedTasks = () => {
+    setShowFinishTask(!showFinishedTask);
   }
 
   const handlerAdd = () => {
@@ -107,14 +111,18 @@ function App() {
     <>
       <Navbar showData={showData} />
       <div id='main-taskmaster' className="todo-main container mx-auto my-6 rounded-xl p-5 min-h-[85vh]">
-        <h1 className='font-bold text-xl text-center'>TaskMaster - Your's Tasks</h1>
+        <h1 className='font-bold text-xl text-center'>TaskMaster - Your Tasks</h1>
         <div className="addTask">
           <h2 className='my-2 font-bold text-xl'>Add your Task</h2>
           <div className='flex gap-4'>
             <input className='outline-none rounded-lg p-1 w-11/12' name='task' type="text" onChange={handerChange} onKeyDown={handlerKeyDown} value={task} placeholder='Enter your task' />
             {/* <textarea id='e' className='outline-none w-11/12 p-1 text-base leading-relaxed border border-gray-300 rounded-md resize-none overflow-hidden box-border max-h-52' onInput={handlerInput} name='task' type="text" onChange={handerChange} onKeyDown={handlerKeyDown} value={task} rows="1" placeholder="Type your task..." ></textarea> */}
-            <button onClick={() => { handlerSave() }} className={`bg-green-600 h-full py-1 px-3 rounded-lg active:bg-green-700 text-white font-bold ${isEdit.editing ? '' : 'hidden'}`}>Save</button>
-            <button onClick={handlerAdd} className={`bg-green-600 h-full py-1 px-3 rounded-lg active:bg-green-700 text-white font-bold  ${isEdit.editing ? 'hidden' : ''}`}>Add</button>
+            <button disabled={task.length <= 3} onClick={handlerSave} className={`bg-green-600 h-full py-1 px-3 rounded-lg active:bg-green-700 text-white font-bold ${isEdit.editing ? '' : 'hidden'} disabled:bg-slate-500 transition-all`}>Save</button>
+            <button disabled={task.length <= 3} onClick={handlerAdd} className={`bg-green-600 h-full py-1 px-3 rounded-lg active:bg-green-700 text-white font-bold  ${isEdit.editing ? 'hidden' : ''} disabled:bg-slate-500 transition-all duration-300`}>Add</button>
+          </div>
+          <div className='flex gap-2 mt-2'>
+            <input onChange={toogleFinishedTasks} type="checkbox" checked={showFinishedTask} id='showFinish' />
+            <label htmlFor="showFinish">Show Finished Tasks</label>
           </div>
         </div>
 
@@ -127,10 +135,10 @@ function App() {
           {taskList.length === 0 && <div className='m-5 text-red-600 text-xl text-center' >No tasks</div>}
 
           {taskList.map((t) => {
-            return (
+            return (showFinishedTask || !t.isDone) && (
               <div key={t.id} className='flex justify-between mb-5 '>
                 <div className='flex gap-2 w-10/12 items-center'>
-                  <input type="checkbox" id={t.id} onChange={handlerCheckbox} />
+                  <input type="checkbox" id={t.id} onChange={handlerCheckbox} checked={t.isDone} />
                   <div className={`${t.isDone ? 'line-through' : ''}`}>{t.task}</div>
                 </div>
                 <div className="buttons flex gap-2 h-full">

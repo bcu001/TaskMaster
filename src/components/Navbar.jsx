@@ -1,7 +1,7 @@
 import React from "react";
 import Theme from "./Theme";
 
-export default function Navbar({showData}) {
+export default function Navbar({ showData }) {
     return (
         <nav className="navbar flex justify-between w-auto py-2">
             <div className="cursor-pointer font-bold text-lg mx-5">TaskMaster</div>

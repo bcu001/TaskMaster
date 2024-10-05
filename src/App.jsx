@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Navbar from './components/Navbar'
+import Seperator from './components/Seperator';
+import Delete from './components/Delete';
 import { v4 as uuidv4 } from 'uuid';
 
 function App() {
@@ -8,6 +10,8 @@ function App() {
   const [isEdit, setIsEdit] = useState({ editing: false });
   const [isLoaded, setIsLoaded] = useState(false);
   const [showFinishedTask, setShowFinishTask] = useState(false);
+  const [showDeleteWindow, setShowDeleteWindow] = useState(false);
+  const [deleteId, setDeleteId] = useState('');
 
   const showData = () => {
     console.log(taskList);
@@ -35,7 +39,7 @@ function App() {
   }
 
   const handlerAdd = () => {
-    if (task != '') {
+    if (task.trim().length > 3) {
       setTaskList([...taskList, { id: uuidv4(), task: task, isDone: false }])
       setTask('')
     }
@@ -86,14 +90,16 @@ function App() {
     setTask('');
   }
 
-  const handlerDelete = (id) => {
-    const isDelete = confirm("Are you sure you want to delete this");
-    if (isDelete) {
-      const newTaskList = taskList.filter(t => {
-        return (t.id != id);
-      })
-      setTaskList(newTaskList);
-    }
+  const handlerDelete = () => {
+    const newTaskList = taskList.filter(t => t.id !== deleteId);
+    setTaskList(newTaskList);
+    setShowDeleteWindow(false);
+    setDeleteId('');
+  }
+
+  const HandlerShowDelete = (id) => {
+    setDeleteId(id);
+    setShowDeleteWindow(true);
   }
 
   const handlerResetInput = () => {
@@ -110,7 +116,7 @@ function App() {
   return (
     <>
       <Navbar showData={showData} />
-      <div id='main-taskmaster' className="todo-main container mx-auto my-6 rounded-xl p-5 min-h-[85vh]">
+      <div id='main-taskmaster' className={`todo-main container mx-auto my-6 rounded-xl p-5 min-h-[85vh] relative `}>
         <h1 className='font-bold text-xl text-center'>TaskMaster - Your Tasks</h1>
         <div className="addTask">
           <h2 className='my-2 font-bold text-xl'>Add your Task</h2>
@@ -126,8 +132,7 @@ function App() {
           </div>
         </div>
 
-        {/* Seperator */}
-        <div className='border my-4 border-black'></div>
+        <Seperator s_gap={4} s_color={'black'} />
 
         <div className="yourTasks">
           <h2 className='font-bold text-xl'>Your Tasks</h2>
@@ -143,7 +148,20 @@ function App() {
                 </div>
                 <div className="buttons flex gap-2 h-full">
                   <button onClick={(e) => { handlerEdit(e, t.id) }} className='bg-green-600 py-1 px-3 rounded-lg active:bg-green-700 text-white font-bold'><img src="/edit.svg" alt="edit" width={25} /></button>
-                  <button onClick={() => { handlerDelete(t.id) }} className='bg-red-600 py-1 px-3 rounded-lg active:bg-red-700 text-white font-bold'><img src="/trash.svg" alt="delete" width={25} /></button>
+                  <button onClick={() => { HandlerShowDelete(t.id) }} className='bg-red-600 py-1 px-3 rounded-lg active:bg-red-700 text-white font-bold'><img src="/trash.svg" alt="delete" width={25} /></button>
+
+                  {
+                    showDeleteWindow && <div className={`absolute top-0 right-0  w-full h-full flex justify-center items-center `}>
+                      <div className=" bg-white w-60 flex flex-col rounded-xl overflow-hidden ">
+                        <div className='cursor-default font-bold p-2 bg-gray-300 text-black'>Delete Task?</div>
+                        <div className='cursor-default text-gray-500 border border-gray-500 border-x-white p-2'>This can't be undone</div>
+                        <div className=" btns flex gap-4 justify-end p-2">
+                          <button onClick={() => { setShowDeleteWindow(false) }} className='border p-1 border-black rounded-lg active:bg-slate-200 text-black'>Cancel</button>
+                          <button onClick={() => { handlerDelete() }} className='border p-1 border-black rounded-lg bg-red-600 text-white active:bg-red-700'>Delete</button>
+                        </div>
+                      </div>
+                    </div>
+                  }
                 </div>
               </div>
             )

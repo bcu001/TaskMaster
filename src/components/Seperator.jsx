@@ -1,7 +1,7 @@
-export default function Seperator({s_gap, s_color}){
-    return(
+export default function Seperator({ }) {
+    return (
         <>
-            <div className={`border my-${s_gap} border-${s_color}`}></div>
+            <div className={`border my-4 border-black`}></div>
         </>
     )
 }

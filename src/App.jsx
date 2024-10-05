@@ -132,7 +132,7 @@ function App() {
           </div>
         </div>
 
-        <Seperator s_gap={4} s_color={'black'} />
+        <Seperator />
 
         <div className="yourTasks">
           <h2 className='font-bold text-xl'>Your Tasks</h2>

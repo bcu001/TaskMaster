@@ -1,9 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import Navbar from "./components/Navbar";
 import Seperator from "./components/Seperator";
-import Delete from "./components/Delete";
 import { v4 as uuidv4 } from "uuid";
 import "./App.css";
+import { Button } from "@/components/ui/button";
+import { Input } from "./components/ui/input";
+import { Label } from "./components/ui/label";
+import { Checkbox } from "./components/ui/checkbox";
+import { Trash } from "lucide-react";
+import { Pencil } from "lucide-react";
 
 function App() {
   const [task, setTask] = useState("");
@@ -37,10 +42,6 @@ function App() {
     localStorage.setItem("taskList", JSON.stringify(taskList));
   };
 
-  const toogleFinishedTasks = () => {
-    setShowFinishTask(!showFinishedTask);
-  };
-
   const handlerAdd = () => {
     if (task.trim().length > 3) {
       setTaskList([...taskList, { id: uuidv4(), task: task, isDone: false }]);
@@ -55,15 +56,10 @@ function App() {
       isEdit.editing ? handlerSave() : handlerAdd();
     }
   };
-
-  const handlerCheckbox = (e) => {
-    const id = e.target.id;
-    const index = taskList.findIndex((t) => {
-      return t.id === id;
-    });
-    let newTaskList = [...taskList];
-    newTaskList[index].isDone = !newTaskList[index].isDone;
-    setTaskList(newTaskList);
+  const handlerCheckbox = (id, checked) => {
+    setTaskList((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, isDone: checked === true } : t))
+    );
   };
 
   const handlerEdit = (e, id) => {
@@ -104,18 +100,6 @@ function App() {
     setShowDeleteWindow(true);
   };
 
-  const handlerResetInput = () => {
-    let a = document.getElementById("e");
-    textarea.style.height = "auto";
-    textarea.value = "";
-  };
-
-  const handlerInput = () => {
-    let a = document.getElementById("e");
-    a.style.height = "auto";
-    a.style.height = a.scrollHeight + "px";
-  };
-
   return (
     <>
       <Navbar showData={showData} />
@@ -129,8 +113,7 @@ function App() {
         <div className="addTask">
           <h2 className="my-2 font-bold text-xl">Add your Task</h2>
           <div className="flex gap-4">
-            <input
-              className="outline-none rounded-lg p-1 w-11/12"
+            <Input
               name="task"
               type="text"
               onChange={handerChange}
@@ -138,34 +121,35 @@ function App() {
               value={task}
               placeholder="Enter your task"
             />
-            {/* <textarea id='e' className='outline-none w-11/12 p-1 text-base leading-relaxed border border-gray-300 rounded-md resize-none overflow-hidden box-border max-h-52' onInput={handlerInput} name='task' type="text" onChange={handerChange} onKeyDown={handlerKeyDown} value={task} rows="1" placeholder="Type your task..." ></textarea> */}
-            <button
+            <Button
               disabled={task.length <= 3}
               onClick={handlerSave}
-              className={`bg-green-600 h-full py-1 px-3 rounded-lg active:bg-green-700 text-white font-bold ${
+              className={`bg-green-600 h-full active:bg-green-700 text-white font-bold ${
                 isEdit.editing ? "" : "hidden"
               } disabled:bg-slate-500 transition-all`}
             >
               Save
-            </button>
-            <button
+            </Button>
+            <Button
               disabled={task.length <= 3}
               onClick={handlerAdd}
-              className={`bg-green-600 h-full py-1 px-3 rounded-lg active:bg-green-700 text-white font-bold  ${
+              className={`bg-green-600 h-full active:bg-green-700 text-white font-bold  ${
                 isEdit.editing ? "hidden" : ""
               } disabled:bg-slate-500 transition-all duration-300`}
             >
               Add
-            </button>
+            </Button>
           </div>
-          <div className="flex gap-2 mt-2">
-            <input
-              onChange={toogleFinishedTasks}
-              type="checkbox"
+          <div className="flex items-center space-x-2 mt-2">
+            <Checkbox
               checked={showFinishedTask}
+              onCheckedChange={(checked) => {
+                setShowFinishTask(checked);
+              }}
               id="showFinish"
             />
-            <label htmlFor="showFinish">Show Finished Tasks</label>
+
+            <Label htmlFor="showFinish">Show Finished Tasks</Label>
           </div>
         </div>
 
@@ -183,33 +167,35 @@ function App() {
               (showFinishedTask || !t.isDone) && (
                 <div key={t.id} className="flex justify-between mb-5 ">
                   <div className="flex gap-2 w-10/12 items-center">
-                    <input
-                      type="checkbox"
-                      id={t.id}
-                      onChange={handlerCheckbox}
+                    <Checkbox
                       checked={t.isDone}
+                      onCheckedChange={(checked) =>
+                        handlerCheckbox(t.id, checked)
+                      }
                     />
+
                     <div className={`${t.isDone ? "line-through" : ""}`}>
                       {t.task}
                     </div>
                   </div>
                   <div className="buttons flex gap-2 h-full">
-                    <button
+                    <Button
                       onClick={(e) => {
                         handlerEdit(e, t.id);
                       }}
-                      className="bg-green-600 py-1 px-3 rounded-lg active:bg-green-700 text-white font-bold"
+                      className="bg-green-600 active:bg-green-700 text-white font-bold"
                     >
-                      <img src="/edit.svg" alt="edit" width={25} />
-                    </button>
-                    <button
+                      <Pencil size={23} />
+                    </Button>
+
+                    <Button
                       onClick={() => {
                         HandlerShowDelete(t.id);
                       }}
-                      className="bg-red-600 py-1 px-3 rounded-lg active:bg-red-700 text-white font-bold"
+                      className="bg-red-600 active:bg-red-700 text-white font-bold"
                     >
-                      <img src="/trash.svg" alt="delete" width={25} />
-                    </button>
+                      <Trash size={25} />
+                    </Button>
 
                     {showDeleteWindow && (
                       <div
@@ -223,22 +209,22 @@ function App() {
                             This can't be undone
                           </div>
                           <div className=" btns flex gap-4 justify-end p-2">
-                            <button
+                            <Button
                               onClick={() => {
                                 setShowDeleteWindow(false);
                               }}
                               className="border p-1 border-black rounded-lg active:bg-slate-200 text-black"
                             >
                               Cancel
-                            </button>
-                            <button
+                            </Button>
+                            <Button
                               onClick={() => {
                                 handlerDelete();
                               }}
                               className="border p-1 border-black rounded-lg bg-red-600 text-white active:bg-red-700"
                             >
                               Delete
-                            </button>
+                            </Button>
                           </div>
                         </div>
                       </div>
